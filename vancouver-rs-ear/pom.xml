@@ -24,7 +24,7 @@
     </dependencies>
 
     <build>
-        <finalName>harvard-rs</finalName>
+        <finalName>vancouver-rs</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -17,7 +17,7 @@ public class TypeDefiner {
 
     private void defineType() {
         String oldType = recordType;
-        //patternsLookup
+        // Поиск по паттернам
         for (Map.Entry<RecordType, Pattern> entry : patternsForType.entrySet()) {
             if (entry.getValue().matcher(oldType).find() || entry.getValue().matcher(instance.getTitle().toLowerCase()).find()) {
                 recordType = entry.getKey().toString();

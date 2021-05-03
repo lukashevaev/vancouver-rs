@@ -27,27 +27,17 @@ public class VancouverBuilder {
     }
 
     private void refactorFields() throws IOException {
-        if (!instance.getAuthor().equals("")) {
-            String[] authors = instance.getAuthor().split("-");
-            switch (authors.length) {
-                case 1: {
-                    instance.setAuthor(authors[0].substring(0, authors[0].length() - 1));
-                    break;
-                }
-                case 2: {
-                    instance.setAuthor(authors[0].substring(0, authors[0].length() - 1) + " and " + authors[1].substring(0, authors[1].length() - 1));
-                    break;
-                }
-                default: {
-                    StringBuilder author = new StringBuilder();
-                    Arrays.stream(authors).forEach(author::append);
-                    author.replace(author.lastIndexOf(","), author.lastIndexOf(",") + 1, "");
-                    author.replace(author.lastIndexOf(","), author.lastIndexOf(",") + 1, " and ");
-                    instance.setAuthor(author.toString());
-                    break;
-                }
-            }
+        String author = instance.getAuthor();
+        if (!author.equals("")) {
+            String[] authors = author.split("-");
+            StringBuilder builder = new StringBuilder();
+            Arrays.stream(authors).limit(6).forEach(authorName -> builder.append(authorName).append(", "));
+            instance.setAuthor(builder.substring(0, builder.length() - 3));
+            if (authors.length >= 6) instance.setAuthor(instance.getAuthor() + " et al");
         }
+
+
+
         if (PatternFactory.universityPattern.matcher(instance.getPublisher()).find())
             instance.setUniversity(instance.getPublisher());
     }
