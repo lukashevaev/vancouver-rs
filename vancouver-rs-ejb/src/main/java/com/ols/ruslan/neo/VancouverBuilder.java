@@ -46,12 +46,14 @@ public class VancouverBuilder {
         StringBuilder builder = new StringBuilder();
         Map<String, String> fields = instance.getFields();
         fields.entrySet().forEach(entry -> entry.setValue(entry.getValue() + ", "));
-        if ("INPROCEEDINGS".equals(recordType)
-                || "ARTICLE".equals(recordType)
-                || "PHDTHESIS".equals(recordType)
-                || "MASTERSTHESIS".equals(recordType)
-                || "INBOOK".equals(recordType)
-        ) instance.setTitle("\"" + instance.getTitle() + "\"");
+        if (!instance.getAuthor().equals("")) {
+            builder.append(instance.getAuthor())
+                    .append(instance.getYear())
+                    .append(instance.getTitle());
+        } else {
+            builder.append(instance.getTitle())
+                    .append(instance.getYear());
+        }
         builder.append(instance.getAuthor())
                 .append(instance.getYear())
                 .append(instance.getTitle());
@@ -78,6 +80,11 @@ public class VancouverBuilder {
             builder.append(instance.getUniversity());
             builder.append(instance.getAddress());
         } else if ("PROCEEDINGS".equals(recordType)) {
+            builder.append(instance.getConference());
+            builder.append(instance.getAddress());
+            builder.append(instance.getData());
+            builder.append(instance.getPages());
+        } else if ("INPROCEEDINGS".equals(recordType)) {
             builder.append(instance.getConference());
             builder.append(instance.getAddress());
             builder.append(instance.getData());
