@@ -18,7 +18,7 @@ public class VancouverInstance {
     }
 
     public String getRecordType() {
-        return fields.get("recordType");
+        return fields.get("recordType") != null ? fields.get("recordType") : "";
     }
 
     public void setRecordType(String recordType) {
