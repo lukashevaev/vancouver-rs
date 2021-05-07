@@ -1,12 +1,27 @@
 package com.ols.ruslan.neo;
 
+import java.util.Locale;
 import java.util.Map;
 
 public class VancouverInstance {
     private Map<String, String> fields;
+    private String oldType;
 
     public VancouverInstance(Map<String, String> fields) {
         this.fields = fields;
+        oldType = getRecordType();
+        if (!"".equals(getJournal())) {
+            fields.put("journal", getJournal());
+        }
+        fields.remove("journal_description");
+    }
+
+    public String getOldType() {
+        return oldType;
+    }
+
+    public void setOldType(String oldType) {
+        this.oldType = oldType;
     }
 
     public Map<String, String> getFields() {
@@ -34,23 +49,17 @@ public class VancouverInstance {
     }
 
     public String getConference() {
-        return fields.get("conference");
+        return fields.get("conference") != null ? fields.get("conference") : "";
     }
 
     public void setConference(String conference) {
         this.fields.put("conference", conference);
     }
 
-    public String getData() {
-        return fields.get("data");
-    }
 
-    public void setData(String data) {
-        this.fields.put("data", data);
-    }
 
     public String getUniversity() {
-        return fields.get("university");
+        return fields.get("university") != null ? fields.get("university") : "";
     }
 
     public void setUniversity(String university) {
@@ -132,7 +141,13 @@ public class VancouverInstance {
     }
 
     public String getJournal() {
-        return fields.get("journal") != null ? fields.get("journal") : "";
+        StringBuilder journal = new StringBuilder();
+        if (fields.get("journal") != null) journal.append(fields.get("journal"));
+        if (fields.get("journal_description") != null && PatternFactory.journalPattern.matcher(fields.get("journal_description").toLowerCase()).find()) {
+            journal.append(", ").append(fields.get("journal_description"));
+            setRecordType("ARTICLE");
+        }
+        return journal.toString();
     }
 
     public void setJournal(String journal) {

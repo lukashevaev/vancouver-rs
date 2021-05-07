@@ -27,6 +27,7 @@ public class VancouverBuilder {
     }
 
     private void refactorFields() throws IOException {
+        instance.deleteRecordType();
         String author = instance.getAuthor();
         if (!author.equals("")) {
             String[] authors = author.split("-");
@@ -36,62 +37,83 @@ public class VancouverBuilder {
             if (authors.length >= 6) instance.setAuthor(instance.getAuthor() + " et al");
         }
 
+        if (!"".equals(instance.getAddress())) instance.setAddress(instance.getAddress() + ": ");
+        if (!"".equals(instance.getConference())) instance.setConference(instance.getConference() + ": ");
+        if (!"".equals(instance.getPages())) instance.setPages("с. " + getDigits(instance.getPages()));
+        if (!"".equals(instance.getPublisher())) instance.setPublisher(instance.getPublisher() + ";");
+        if (!"".equals(instance.getYear())) instance.setYear(instance.getYear() + ".");
+
 
 
         if (PatternFactory.universityPattern.matcher(instance.getPublisher()).find())
             instance.setUniversity(instance.getPublisher());
+
+        instance.getFields().entrySet().forEach(entry -> {
+            if (!PatternFactory.specialSymbolsPattern.matcher(entry.getValue()).find()) {
+                entry.setValue(entry.getValue() + ". ");
+            }
+        });
     }
 
     public String buildVancouver() {
         StringBuilder builder = new StringBuilder();
-        Map<String, String> fields = instance.getFields();
-        fields.entrySet().forEach(entry -> entry.setValue(entry.getValue() + ", "));
-        if (!instance.getAuthor().equals("")) {
+        if (!"".equals(instance.getAuthor())) {
             builder.append(instance.getAuthor())
-                    .append(instance.getYear())
                     .append(instance.getTitle());
         } else {
-            builder.append(instance.getTitle())
-                    .append(instance.getYear());
+            builder.append(instance.getTitle());
         }
-        builder.append(instance.getAuthor())
-                .append(instance.getYear())
-                .append(instance.getTitle());
         if ("ARTICLE".equals(recordType)) {
             builder.append(instance.getJournal());
-            builder.append(instance.getVolume());
+            builder.append(instance.getYear());
+            if (!instance.getVolume().equals("")) builder.append(instance.getVolume()).append(": ");
             builder.append(instance.getPages());
         } else if ("BOOK".equals(recordType)) {
+            builder.append(instance.getVolume());
+            builder.append(instance.getEdition());
             builder.append(instance.getPublisher());
             builder.append(instance.getAddress());
-        } else if ("INBOOK".equals(recordType)) {
-            instance.setTitleChapter("в " + instance.getTitleChapter());
-            builder.append(instance.getTitleChapter());
-            builder.append(instance.getPublisher());
-            builder.append(instance.getAddress());
+                    //getEditor;
+            builder.append(instance.getYear());
             builder.append(instance.getPages());
-        }
-        else if ("PHDTHESIS".equals(recordType)) {
-            builder.append("Abstract of bachelor dissertation");
+        } else if ("INBOOK".equals(recordType)) {
+            if (!instance.getPublisher().equals("")) instance.setPublisher("В: " + instance.getPublisher() + "(изд.)");
+            builder.append(instance.getPublisher());
+            builder.append(instance.getTitleChapter());
+            builder.append(instance.getVolume());
+            builder.append(instance.getEdition());
+            builder.append(instance.getAddress());
+            //getEditor;
+            builder.append(instance.getYear());
+            builder.append(instance.getPages());
+        } else if ("THESIS".equals(recordType)) {
+            if (!instance.getOldType().equals("")) builder.append("[").append(instance.getOldType()).append("]");
             builder.append(instance.getUniversity());
             builder.append(instance.getAddress());
-        } else if ("MASTERSTHESIS".equals(recordType)) {
-            builder.append("Abstract of master dissertation");
-            builder.append(instance.getUniversity());
-            builder.append(instance.getAddress());
+            builder.append(instance.getPublisher());
+            builder.append(instance.getYear());
         } else if ("PROCEEDINGS".equals(recordType)) {
             builder.append(instance.getConference());
+            //getEditor;
+            builder.append(instance.getTitleChapter());
             builder.append(instance.getAddress());
-            builder.append(instance.getData());
+            builder.append(instance.getPublisher());
+            builder.append(instance.getYear());
             builder.append(instance.getPages());
         } else if ("INPROCEEDINGS".equals(recordType)) {
             builder.append(instance.getConference());
+            //getEditor;
+            builder.append(instance.getTitleChapter());
             builder.append(instance.getAddress());
-            builder.append(instance.getData());
+            builder.append(instance.getPublisher());
+            builder.append(instance.getYear());
             builder.append(instance.getPages());
+        } else {
+            builder = new StringBuilder();
+            instance.getFields().values().forEach(builder::append);
         }
         builder.trimToSize();
-        builder.deleteCharAt(builder.length() - 2);
-        return builder.toString().replace(",,", ",");
+        builder.deleteCharAt(builder.length() - 1);
+        return builder.toString().replace("..", ".").replace(",,", ",");
     }
 }

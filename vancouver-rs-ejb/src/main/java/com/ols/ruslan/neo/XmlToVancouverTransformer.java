@@ -30,7 +30,7 @@ public class XmlToVancouverTransformer implements MediaTypeTransformerFacade {
 
 
     @PostConstruct
-    private void startup() {
+    void startup() {
         log.info("Startup");
         try {
             templates = transformerFactory.newTemplates(new StreamSource(

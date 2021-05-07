@@ -28,9 +28,6 @@
                             </xsl:for-each>
                             <xsl:for-each
                                     select="field[@id='710' or @id='711'] | field[@id='461' or @id='463']/subfield[@id='1']/field[@id='710' or @id='711']">
-                                <!--
-                                        <xsl:call-template name="corporateCreator" />
-                                        -->
                             </xsl:for-each>
                         </xsl:when>
                         <xsl:otherwise>
@@ -84,6 +81,25 @@
                     </xsl:for-each>
                 </title>
 
+                <volume>
+                    <xsl:choose>
+                        <xsl:when
+                                test="field[@id='461']/subfield[@id='1']/field[@if='200']/subfield[@id='v']">
+                            <xsl:value-of
+                                    select="field[@id='461']/subfield[@id='1']/field[@if='200']/subfield[@id='v']" />
+                        </xsl:when>
+                        <xsl:when test="field[@id='462']/subfield[@id='1']/field[@id='200']/subfield[@id='v']">
+                            <xsl:value-of select="field[@id='462']/subfield[@id='1']/field[@id='200']/subfield[@id='v']"/>
+                        </xsl:when>
+                        <xsl:when test="(field[@id='463']/subfield[@id='1']/field[@id='200']/subfield[@id='a'])">
+                            <xsl:value-of select="field[@id='463']/subfield[@id='1']/field[@id='200']/subfield[@id='a']" />
+                        </xsl:when>
+                        <!--<xsl:otherwise>
+                            <xsl:text>Unknown</xsl:text>
+                        </xsl:otherwise>-->
+                    </xsl:choose>
+                </volume>
+
                 <year>
                     <xsl:choose>
                         <xsl:when test="field[@id='210']/subfield[@id='d']">
@@ -96,9 +112,6 @@
                                     <xsl:value-of
                                             select="field[@id='463']/subfield[@id='1']/field[@id='210']/subfield[@id='d'][1]" />
                                 </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:text>Unknown</xsl:text>
-                                </xsl:otherwise>
                             </xsl:choose>
                         </xsl:otherwise>
                     </xsl:choose>
@@ -119,9 +132,9 @@
                                 <xsl:when test="field[@id='463']/subfield[@id='1']/field[@id='101']">
                                     <xsl:value-of select="field[@id='463']/subfield[@id='1']/field[@id='101']/subfield[@id='a']"/>
                                 </xsl:when>
-                                <xsl:otherwise>
+                                <!--<xsl:otherwise>
                                     <xsl:text>Unknown</xsl:text>
-                                </xsl:otherwise>
+                                </xsl:otherwise>-->
                             </xsl:choose>
                         </xsl:otherwise>
                     </xsl:choose>
@@ -155,6 +168,10 @@
                     <xsl:value-of select="field[@id='461']/subfield[@id='1']/field[@id='200']/subfield[@id='a']" />
                 </journal>
 
+                <journal_description>
+                    <xsl:value-of select="field[@id='461']/subfield[@id='1']/field[@id='200']/subfield[@id='e']" />
+                </journal_description>
+
                 <number>
                     <xsl:value-of select="field[@id='463']/subfield[@id='1']/field[@id='200']/subfield[@id='a']" />
                 </number>
@@ -168,33 +185,26 @@
                     <xsl:value-of select="field[@id='15']/subfield[@id='a']" />
                 </technumber>
 
-                <volume>
-                    <xsl:choose>
-                        <xsl:when
-                                test="field[@id='461']/subfield[@id='1']/field[@if='200']/subfield[@id='v']">
-                            <xsl:value-of
-                                    select="field[@id='461']/subfield[@id='1']/field[@if='200']/subfield[@id='v']" />
-                        </xsl:when>
-                        <xsl:when test="field[@id='462']/subfield[@id='1']/field[@id='200']/subfield[@id='v']">
-                            <xsl:value-of select="field[@id='462']/subfield[@id='1']/field[@id='200']/subfield[@id='v']"/>
-                        </xsl:when>
-                        <xsl:when test="(field[@id='463']/subfield[@id='1']/field[@id='200']/subfield[@id='a'])">
-                            <xsl:value-of select="field[@id='463']/subfield[@id='1']/field[@id='200']/subfield[@id='a']" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text>Unknown</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </volume>
+
 
 
                 <publisher>
                     <xsl:choose>
-                        <xsl:when test="field[@id='210']/subfield[@id='c' or @id='g']">
+                        <xsl:when test="field[@id='210']/subfield[@id='a' or @id='c' or @id='g']">
                             <xsl:value-of select="field[@id='210']/subfield[@id='c' or @id='g'][1]" />
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:choose>
+                                <xsl:when
+                                        test="field[@id='461']/subfield[@id='1']/field[@id='210']/subfield[@id='c']">
+                                    <xsl:value-of
+                                            select="field[@id='461']/subfield[@id='1']/field[@id='210']/subfield[@id='c']" />
+                                </xsl:when>
+                                <xsl:when
+                                        test="field[@id='461']/subfield[@id='1']/field[@id='300']/subfield[@id='a']">
+                                    <xsl:value-of
+                                            select="field[@id='461']/subfield[@id='1']/field[@id='300']/subfield[@id='a']" />
+                                </xsl:when>
                                 <xsl:when
                                         test="field[@id='463']/subfield[@id='1']/field[@id='210']/subfield[@id='c' or @id='g']">
                                     <xsl:value-of
@@ -210,7 +220,6 @@
             </entry>
         </file>
     </xsl:template>
-
 
 
     <xsl:template name="personalCreator">

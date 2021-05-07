@@ -3,8 +3,7 @@ package com.ols.ruslan.neo;
 public enum RecordType {
     BOOK,
     ARTICLE,
-    MASTERSTHESIS,
-    PHDTHESIS,
+    THESIS,
     ABSTRACT,
     PROCEEDINGS,
     INPROCEEDINGS,
