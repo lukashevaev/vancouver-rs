@@ -3,7 +3,9 @@ package com.ols.ruslan.neo;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class VancouverBuilder {
     private final String recordType;
@@ -33,15 +35,16 @@ public class VancouverBuilder {
             String[] authors = author.split("-");
             StringBuilder builder = new StringBuilder();
             Arrays.stream(authors).limit(6).forEach(authorName -> builder.append(authorName).append(", "));
-            instance.setAuthor(builder.substring(0, builder.length() - 3));
+            instance.setAuthor(builder.substring(0, builder.length() - 2));
             if (authors.length >= 6) instance.setAuthor(instance.getAuthor() + " et al");
         }
 
-        if (!"".equals(instance.getAddress())) instance.setAddress(instance.getAddress() + ": ");
-        if (!"".equals(instance.getConference())) instance.setConference(instance.getConference() + ": ");
-        if (!"".equals(instance.getPages())) instance.setPages("с. " + getDigits(instance.getPages()));
-        if (!"".equals(instance.getPublisher())) instance.setPublisher(instance.getPublisher() + ";");
-        if (!"".equals(instance.getYear())) instance.setYear(instance.getYear() + ".");
+        instance.setAddress(instance.getAddress() + ": ");
+        instance.setConference(instance.getConference() + ": ");
+        instance.setPages("с. " + getDigits(instance.getPages()));
+        instance.setPublisher(instance.getPublisher() + ";");
+        instance.setYear(instance.getYear() + ".");
+        instance.setYear(instance.getEditor() + ";");
 
 
 
@@ -53,6 +56,14 @@ public class VancouverBuilder {
                 entry.setValue(entry.getValue() + ". ");
             }
         });
+
+        //Удаляем пустые поля
+        instance.setFields(
+                instance.getFields()
+                        .entrySet()
+                        .stream()
+                        .filter(entry -> entry.getValue() != null && !entry.getValue().equals("") && PatternFactory.notEmptyFieldPattern.matcher(entry.getValue()).find())
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue , (a, b) -> a, LinkedHashMap::new)));
     }
 
     public String buildVancouver() {
@@ -64,26 +75,27 @@ public class VancouverBuilder {
             builder.append(instance.getTitle());
         }
         if ("ARTICLE".equals(recordType)) {
+            instance.setVolume(instance.getVolume() + ": ");
             builder.append(instance.getJournal());
             builder.append(instance.getYear());
-            if (!instance.getVolume().equals("")) builder.append(instance.getVolume()).append(": ");
+            builder.append(instance.getVolume());
             builder.append(instance.getPages());
         } else if ("BOOK".equals(recordType)) {
             builder.append(instance.getVolume());
             builder.append(instance.getEdition());
             builder.append(instance.getPublisher());
             builder.append(instance.getAddress());
-                    //getEditor;
+            builder.append(instance.getEditor());
             builder.append(instance.getYear());
             builder.append(instance.getPages());
         } else if ("INBOOK".equals(recordType)) {
-            if (!instance.getPublisher().equals("")) instance.setPublisher("В: " + instance.getPublisher() + "(изд.)");
+            instance.setPublisher("В: " + instance.getPublisher() + "(изд.)");
             builder.append(instance.getPublisher());
             builder.append(instance.getTitleChapter());
             builder.append(instance.getVolume());
             builder.append(instance.getEdition());
             builder.append(instance.getAddress());
-            //getEditor;
+            builder.append(instance.getEditor());
             builder.append(instance.getYear());
             builder.append(instance.getPages());
         } else if ("THESIS".equals(recordType)) {
@@ -94,7 +106,7 @@ public class VancouverBuilder {
             builder.append(instance.getYear());
         } else if ("PROCEEDINGS".equals(recordType)) {
             builder.append(instance.getConference());
-            //getEditor;
+            builder.append(instance.getEditor());
             builder.append(instance.getTitleChapter());
             builder.append(instance.getAddress());
             builder.append(instance.getPublisher());
@@ -102,7 +114,7 @@ public class VancouverBuilder {
             builder.append(instance.getPages());
         } else if ("INPROCEEDINGS".equals(recordType)) {
             builder.append(instance.getConference());
-            //getEditor;
+            builder.append(instance.getEditor());
             builder.append(instance.getTitleChapter());
             builder.append(instance.getAddress());
             builder.append(instance.getPublisher());
@@ -113,7 +125,20 @@ public class VancouverBuilder {
             instance.getFields().values().forEach(builder::append);
         }
         builder.trimToSize();
-        builder.deleteCharAt(builder.length() - 1);
-        return builder.toString().replace("..", ".").replace(",,", ",");
+        String[] words = builder.toString().split(" ");
+        String field = null;
+        for (int i = words.length - 1; i >= 0; i--) {
+            field = words[i];
+            if (PatternFactory.notEmptyFieldPattern.matcher(field).find() && field.length() > 1) {
+                break;
+            }
+        }
+        String result = builder.toString();
+        if (field != null) return builder
+                .substring(0, result.lastIndexOf(field) + field.length())
+                .replaceAll("\\.\\s*[a-zA-Zа-яА-Я]?\\s*\\.", ".")
+                .replaceAll(",\\s*[,.]", ",")
+                .replaceAll(":\\s*[,.]", ":");
+        return result;
     }
 }

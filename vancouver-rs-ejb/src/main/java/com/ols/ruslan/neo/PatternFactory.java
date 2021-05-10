@@ -19,34 +19,28 @@ public class PatternFactory {
 
     public PatternFactory() {
         patternsForType.put(RecordType.BOOK,
-                Pattern.compile("(" +
-                        "энциклопедия|" +
-                        "encyclopaedia|" +
-                        "сборник|" +
-                        "собрание|" +
-                        "сочинения|" +
-                        "работы|" +
-                        "(в|in)\\s\\d+-?х?\\s(т|ч|vols)\\.?)$"));
+                Pattern.compile("энциклопедия|encyclopa[e]?dia|сборник|собрание|сочинения|работы|книга|словарь|" +
+                        "(в|in)\\s\\d+-?х?\\s(т|ч|vols)\\.?$")); // Пример: сборник в 3 томах
         patternsForType.put(RecordType.PROCEEDINGS,
-                Pattern.compile("(proceedings|" +
+                Pattern.compile("proceedings|" +
                         "of\\s*(a|the)\\s*conference|" +
                         "conference|" +
                         "proceedings\\s*of|" +
                         "of\\s*(a|the).*\\s*colloquium|" +
                         "of\\s*symposia|" +
                         "symposium|" +
-                        "of\\s*(a|the)\\s*congress)"));
+                        "of\\s*(a|the)\\s*congress"));
         patternsForType.put(RecordType.INPROCEEDINGS,
                 Pattern.compile("inproceedings"));
         patternsForType.put(RecordType.ARTICLE,
-                Pattern.compile("(журнал|" +
+                Pattern.compile("журнал|" +
                         "journal|" +
                         "статья|" +
-                        "article)"));
+                        "article"));
         patternsForType.put(RecordType.ABSTRACT,
-                Pattern.compile("(abstract\\s*of|автореферат)"));
+                Pattern.compile("abstract\\s*of|автореферат"));
         patternsForType.put(RecordType.THESIS,
-                Pattern.compile("дис.*канд|выпускная квалификационная работа|дис.*маг|" +
+                Pattern.compile("дис.*канд|выпускная квалификационная работа|дис.*маг|дис.*док|диссертац|" +
                         "((master(s)|bachelor)?)?\\s*thesis\\s*((of)?\\smaster(s)|bachelor)?"));
         patternsForType.put(RecordType.PATENT,
                 Pattern.compile("patent"));
@@ -88,7 +82,7 @@ public class PatternFactory {
         return patternForTags;
     }
 
-    public static Map<RecordType, Pattern> getPatternsForType() {
+    public Map<RecordType, Pattern> getPatternsForType() {
         return patternsForType;
     }
 
@@ -99,4 +93,6 @@ public class PatternFactory {
     public static final Pattern journalPattern = Pattern.compile("журнал|journal");
 
     public static final Pattern specialSymbolsPattern = Pattern.compile("[:;]");
+
+    public static final Pattern notEmptyFieldPattern = Pattern.compile("[a-zA-Zа-яА-Я0-9]");
 }

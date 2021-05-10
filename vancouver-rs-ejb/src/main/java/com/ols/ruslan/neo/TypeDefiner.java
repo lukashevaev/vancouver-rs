@@ -9,7 +9,8 @@ public class TypeDefiner {
     private final VancouverInstance instance;
 
     public TypeDefiner(VancouverInstance instance){
-        patternsForType = PatternFactory.getPatternsForType();
+        PatternFactory factory = new PatternFactory();
+        patternsForType = factory.getPatternsForType();
         this.instance = instance;
         recordType = instance.getRecordType();
         defineType();
