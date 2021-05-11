@@ -92,7 +92,7 @@ public class PatternFactory {
 
     public static final Pattern journalPattern = Pattern.compile("журнал|journal");
 
-    public static final Pattern specialSymbolsPattern = Pattern.compile("[:;]");
+    public static final Pattern specialSymbolsPattern = Pattern.compile("[:;.,\\-/\\s]");
 
-    public static final Pattern notEmptyFieldPattern = Pattern.compile("[a-zA-Zа-яА-Я0-9]");
+    public static final Pattern notEmptyFieldPattern = Pattern.compile("[a-zA-Zа-яА-Я0-9]{2,}");
 }

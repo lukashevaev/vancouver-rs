@@ -32,7 +32,7 @@ public class VancouverBuilder {
         instance.deleteRecordType();
         String author = instance.getAuthor();
         if (!author.equals("")) {
-            String[] authors = author.split("-");
+            String[] authors = author.split(",");
             StringBuilder builder = new StringBuilder();
             Arrays.stream(authors).limit(6).forEach(authorName -> builder.append(authorName).append(", "));
             instance.setAuthor(builder.substring(0, builder.length() - 2));
@@ -44,7 +44,8 @@ public class VancouverBuilder {
         instance.setPages("с. " + getDigits(instance.getPages()));
         instance.setPublisher(instance.getPublisher() + ";");
         instance.setYear(instance.getYear() + ".");
-        instance.setYear(instance.getEditor() + ";");
+        instance.setEditor(instance.getEditor() + ";");
+
 
 
 
@@ -52,7 +53,11 @@ public class VancouverBuilder {
             instance.setUniversity(instance.getPublisher());
 
         instance.getFields().entrySet().forEach(entry -> {
-            if (!PatternFactory.specialSymbolsPattern.matcher(entry.getValue()).find()) {
+            String value = entry.getValue();
+            if (value != null
+                    && value.length() > 1
+                    && !PatternFactory.specialSymbolsPattern.matcher(String.valueOf(value.charAt(value.length() - 1))).find()
+                    && PatternFactory.notEmptyFieldPattern.matcher(entry.getValue()).find()) {
                 entry.setValue(entry.getValue() + ". ");
             }
         });

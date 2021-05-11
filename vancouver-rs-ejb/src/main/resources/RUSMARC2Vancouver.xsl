@@ -237,7 +237,7 @@
                 <xsl:if test="subfield[@id='b']">
                     <xsl:text> </xsl:text>
                     <xsl:value-of select="subfield[@id='b']" />
-                    <xsl:text>,--</xsl:text>
+                    <xsl:text>,</xsl:text>
                 </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
