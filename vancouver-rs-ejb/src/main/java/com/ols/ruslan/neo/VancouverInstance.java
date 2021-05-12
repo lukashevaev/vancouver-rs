@@ -36,8 +36,12 @@ public class VancouverInstance {
     }
 
     public void setRecordType(String recordType) {
-        if (fields.get("recordType") == null) return;
-        this.fields.put("recordType", recordType);
+        try {
+            if (fields.get("recordType") == null) throw new NullPointerException();
+            this.fields.put("recordType", recordType);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getTechreport() {
@@ -45,8 +49,12 @@ public class VancouverInstance {
     }
 
     public void setTechreport(String techreport) {
-        if (fields.get("techreport") == null) return;
-        this.fields.put("techreport", techreport);
+        try {
+            if (fields.get("techreport") == null) throw new NullPointerException();
+            this.fields.put("techreport", techreport);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getConference() {
@@ -54,8 +62,12 @@ public class VancouverInstance {
     }
 
     public void setConference(String conference) {
-        if (fields.get("conference") == null) return;
-        this.fields.put("conference", conference);
+        try {
+            if (fields.get("conference") == null) throw new NullPointerException();
+            this.fields.put("conference", conference);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -65,8 +77,12 @@ public class VancouverInstance {
     }
 
     public void setUniversity(String university) {
-        if (fields.get("university") == null) return;
-        this.fields.put("university", university);
+        try {
+            if (fields.get("university") == null) throw new NullPointerException();
+            this.fields.put("university", university);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -75,9 +91,13 @@ public class VancouverInstance {
         return fields.get("author") != null ? fields.get("author") : "";
     }
 
-    public void setAuthor(String author) {
-        if (fields.get("recordType") == null) return;
-        this.fields.put("author", author);
+    public void setAuthor(String author) throws NullPointerException{
+        try {
+            if (fields.get("author") == null) throw new NullPointerException();
+            this.fields.put("author", author);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getYear() {
@@ -85,8 +105,12 @@ public class VancouverInstance {
     }
 
     public void setYear(String year) {
-        if (fields.get("year") == null) return;
-        this.fields.put("year", year);
+        try {
+            if (fields.get("year") == null) throw new NullPointerException();
+            this.fields.put("year", year);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getPublisher() {
@@ -94,8 +118,12 @@ public class VancouverInstance {
     }
 
     public void setPublisher(String publisher) {
-        if (fields.get("publisher") == null) return;
-        this.fields.put("publisher", publisher);
+        try {
+            if (fields.get("publisher") == null) throw new NullPointerException();
+            this.fields.put("publisher", publisher);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getTitle() {
@@ -107,8 +135,12 @@ public class VancouverInstance {
     }
 
     public void setTitle(String title) {
-        if (fields.get("title") == null) return;
-        this.fields.put("title", title);
+        try {
+            if (fields.get("title") == null) throw new NullPointerException();
+            this.fields.put("title", title);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getLanguage() {
@@ -116,8 +148,12 @@ public class VancouverInstance {
     }
 
     public void setLanguage(String language) {
-        if (fields.get("language") == null) return;
-        this.fields.put("language", language);
+        try {
+            if (fields.get("language") == null) throw new NullPointerException();
+            this.fields.put("language", language);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getSchool() {
@@ -125,8 +161,12 @@ public class VancouverInstance {
     }
 
     public void setSchool(String school) {
-        if (fields.get("school") == null) return;
-        this.fields.put("school", school);
+        try {
+            if (fields.get("school") == null) throw new NullPointerException();
+            this.fields.put("school", school);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getUrl() {
@@ -134,8 +174,12 @@ public class VancouverInstance {
     }
 
     public void setUrl(String url) {
-        if (fields.get("url") == null) return;
-        this.fields.put("url", url);
+        try {
+            if (fields.get("url") == null) throw new NullPointerException();
+            this.fields.put("url", url);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getAddress() {
@@ -143,8 +187,12 @@ public class VancouverInstance {
     }
 
     public void setAddress(String address) {
-        if (fields.get("address") == null) return;
-        this.fields.put("address", address);
+        try {
+            if (fields.get("address") == null) throw new NullPointerException();
+            this.fields.put("address", address);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getEdition() {
@@ -152,15 +200,23 @@ public class VancouverInstance {
     }
 
     public void setEdition(String edition) {
-        if (fields.get("edition") == null) return;
-        this.fields.put("edition", edition);
+        try {
+            if (fields.get("edition") == null) throw new NullPointerException();
+            this.fields.put("edition", edition);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getEditor() { return fields.get("editor") != null ? fields.get("editor") : ""; }
 
     public void setEditor(String editor) {
-        if (fields.get("editor") == null) return;
-        this.fields.put("editor", editor);
+        try {
+            if (fields.get("editor") == null) throw new NullPointerException();
+            this.fields.put("editor", editor);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getJournal() {
@@ -174,8 +230,12 @@ public class VancouverInstance {
     }
 
     public void setJournal(String journal) {
-        if (fields.get("journal") == null) return;
-        this.fields.put("journal", journal);
+        try {
+            if (fields.get("journal") == null) throw new NullPointerException();
+            this.fields.put("journal", journal);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getNumber() {
@@ -183,8 +243,12 @@ public class VancouverInstance {
     }
 
     public void setNumber(String number) {
-        if (fields.get("number") == null) return;
-        this.fields.put("number", number);
+        try {
+            if (fields.get("number") == null) throw new NullPointerException();
+            this.fields.put("number", number);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getPages() {
@@ -192,8 +256,12 @@ public class VancouverInstance {
     }
 
     public void setPages(String pages) {
-        if (fields.get("pages") == null) return;
-        this.fields.put("pages", pages);
+        try {
+            if (fields.get("pages") == null) throw new NullPointerException();
+            this.fields.put("pages", pages);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getVolume() {
@@ -201,8 +269,12 @@ public class VancouverInstance {
     }
 
     public void setVolume(String volume) {
-        if (fields.get("volume") == null) return;
-        this.fields.put("volume", volume);
+        try {
+            if (fields.get("volume") == null) throw new NullPointerException();
+            this.fields.put("volume", volume);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteYear() {

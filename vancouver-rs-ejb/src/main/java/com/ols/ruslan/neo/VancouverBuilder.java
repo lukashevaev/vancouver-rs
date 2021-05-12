@@ -35,19 +35,17 @@ public class VancouverBuilder {
             String[] authors = author.split(",");
             StringBuilder builder = new StringBuilder();
             Arrays.stream(authors).limit(6).forEach(authorName -> builder.append(authorName).append(", "));
-            instance.setAuthor(builder.substring(0, builder.length() - 2));
+            instance.setAuthor(builder.toString().trim().substring(0, builder.length() - 2).concat(". "));
             if (authors.length >= 6) instance.setAuthor(instance.getAuthor() + " et al");
         }
 
         instance.setAddress(instance.getAddress() + ": ");
         instance.setConference(instance.getConference() + ": ");
-        instance.setPages("с. " + getDigits(instance.getPages()));
-        instance.setPublisher(instance.getPublisher() + ";");
+        instance.setPages(" с. " + getDigits(instance.getPages()));
+        instance.setPublisher(instance.getPublisher() + "; ");
         instance.setYear(instance.getYear() + ".");
-        instance.setEditor(instance.getEditor() + ";");
-
-
-
+        instance.setEditor(instance.getEditor() + "; ");
+        instance.setJournal(instance.getJournal() + ". ");
 
         if (PatternFactory.universityPattern.matcher(instance.getPublisher()).find())
             instance.setUniversity(instance.getPublisher());
@@ -57,7 +55,8 @@ public class VancouverBuilder {
             if (value != null
                     && value.length() > 1
                     && !PatternFactory.specialSymbolsPattern.matcher(String.valueOf(value.charAt(value.length() - 1))).find()
-                    && PatternFactory.notEmptyFieldPattern.matcher(entry.getValue()).find()) {
+                    && PatternFactory.notEmptyFieldPattern.matcher(entry.getValue()).find()
+                    && PatternFactory.lastSymbolIsNotSpecial(entry.getValue())) {
                 entry.setValue(entry.getValue() + ". ");
             }
         });
@@ -104,7 +103,7 @@ public class VancouverBuilder {
             builder.append(instance.getYear());
             builder.append(instance.getPages());
         } else if ("THESIS".equals(recordType)) {
-            if (!instance.getOldType().equals("")) builder.append("[").append(instance.getOldType()).append("]");
+            if (!instance.getOldType().equals("")) builder.append(String.format("[%s]", instance.getOldType()));
             builder.append(instance.getUniversity());
             builder.append(instance.getAddress());
             builder.append(instance.getPublisher());
@@ -141,8 +140,9 @@ public class VancouverBuilder {
         String result = builder.toString();
         if (field != null) return builder
                 .substring(0, result.lastIndexOf(field) + field.length())
-                .replaceAll("\\.\\s*[a-zA-Zа-яА-Я]?\\s*\\.", ".")
-                .replaceAll(",\\s*[,.]", ",")
+                .replaceAll("\\.\\s*\\.", ".")
+                .replaceAll("\\.[a-zA-Zа-яА-Я]?\\.", ".")
+                .replaceAll(",\\s*[,.]", ".")
                 .replaceAll(":\\s*[,.]", ":");
         return result;
     }

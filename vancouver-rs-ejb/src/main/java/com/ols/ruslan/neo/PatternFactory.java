@@ -1,8 +1,12 @@
 package com.ols.ruslan.neo;
 
+import org.jsoup.helper.StringUtil;
+
+import javax.swing.text.StringContent;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.regex.Pattern;
 
 /**
@@ -95,4 +99,8 @@ public class PatternFactory {
     public static final Pattern specialSymbolsPattern = Pattern.compile("[:;.,\\-/\\s]");
 
     public static final Pattern notEmptyFieldPattern = Pattern.compile("[a-zA-Zа-яА-Я0-9]{2,}");
+
+    public static boolean lastSymbolIsNotSpecial(String field) {
+        return !PatternFactory.specialSymbolsPattern.matcher(String.valueOf(field.charAt(field.length() - 1))).find();
+    }
 }
