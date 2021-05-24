@@ -25,7 +25,7 @@ public class VancouverBuilder {
 
     // Метод для выделения цифр из поля
     public String getDigits(String field) {
-        return field.replaceAll("[^0-9]", "");
+        return field.replaceAll("[^0-9-]", "");
     }
 
     private void refactorFields() throws IOException {
@@ -41,9 +41,11 @@ public class VancouverBuilder {
 
         instance.setAddress(instance.getAddress() + ": ");
         instance.setConference(instance.getConference() + ": ");
-        instance.setPages(" с. " + getDigits(instance.getPages()));
-        instance.setPublisher(instance.getPublisher() + "; ");
-        instance.setYear(instance.getYear() + ".");
+        instance.setPages(getDigits(instance.getPages()));
+        //instance.setPublisher(instance.getPublisher() + "; ");
+        instance.setYear(instance.getYear() + "; ");
+        instance.setVolume(instance.getVolume() + ": ");
+        instance.setNumber(" (" + instance.getNumber() + ") ");
         instance.setEditor(instance.getEditor() + "; ");
         instance.setJournal(instance.getJournal() + ". ");
 
@@ -83,23 +85,26 @@ public class VancouverBuilder {
             builder.append(instance.getJournal());
             builder.append(instance.getYear());
             builder.append(instance.getVolume());
+            builder.append(instance.getNumber());
             builder.append(instance.getPages());
         } else if ("BOOK".equals(recordType)) {
-            builder.append(instance.getVolume());
-            builder.append(instance.getEdition());
-            builder.append(instance.getPublisher());
-            builder.append(instance.getAddress());
             builder.append(instance.getEditor());
+            builder.append(instance.getVolume());
+            builder.append(instance.getNumber());
+            builder.append(instance.getEdition());
+            builder.append(instance.getAddress());
+            builder.append(instance.getPublisher());
             builder.append(instance.getYear());
             builder.append(instance.getPages());
         } else if ("INBOOK".equals(recordType)) {
-            instance.setPublisher("В: " + instance.getPublisher() + "(изд.)");
-            builder.append(instance.getPublisher());
+            instance.setPublisher("В: " + instance.getPublisher() + " (изд.)");
+            builder.append(instance.getEditor());
             builder.append(instance.getTitleChapter());
             builder.append(instance.getVolume());
+            builder.append(instance.getNumber());
             builder.append(instance.getEdition());
             builder.append(instance.getAddress());
-            builder.append(instance.getEditor());
+            builder.append(instance.getPublisher());
             builder.append(instance.getYear());
             builder.append(instance.getPages());
         } else if ("THESIS".equals(recordType)) {
