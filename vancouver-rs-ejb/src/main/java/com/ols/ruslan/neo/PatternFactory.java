@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 public class PatternFactory {
 
-    private final Map<String, String> patternForTags = new LinkedHashMap<String, String>();
+    private final Map<String, String> patternForTags = new LinkedHashMap<>();
     private static final Map<RecordType, Pattern> patternsForType = new HashMap<>();
 
     public PatternFactory() {
@@ -56,7 +56,7 @@ public class PatternFactory {
      * Если поле совпадает с паттерном "digits-digits"
      * Например "10-20", "345-466"
      */
-    public static final Pattern pagesPattern = Pattern.compile("\\D*\\d*-\\d*");
+    public static final Pattern pagesPattern = Pattern.compile("\\D*\\d+-\\d+");
 
     /**
      * Для поля "volume"
@@ -98,7 +98,7 @@ public class PatternFactory {
 
     public static final Pattern specialSymbolsPattern = Pattern.compile("[:;.,\\-/\\s]");
 
-    public static final Pattern notEmptyFieldPattern = Pattern.compile("[a-zA-Zа-яА-Я0-9]{2,}");
+    public static final Pattern notEmptyFieldPattern = Pattern.compile("[a-zA-Zа-яА-Я0-9]");
 
     public static boolean lastSymbolIsNotSpecial(String field) {
         return !PatternFactory.specialSymbolsPattern.matcher(String.valueOf(field.charAt(field.length() - 1))).find();

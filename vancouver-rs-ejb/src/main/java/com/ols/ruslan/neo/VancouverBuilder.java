@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class VancouverBuilder {
@@ -51,6 +52,20 @@ public class VancouverBuilder {
 
         if (PatternFactory.universityPattern.matcher(instance.getPublisher()).find())
             instance.setUniversity(instance.getPublisher());
+
+        // Если тип записи статья,  но номер журнала не подходит под паттерн-
+        // удаляем его. В противном случае удаляем номер тома
+        if (!recordType.equals("ARTICLE")) {
+            if (!PatternFactory.numberPattern.matcher(instance.getNumber().toLowerCase()).find()) {
+                instance.deleteNumber();
+            }
+            else {
+                if (!Objects.equals(instance.getVolume(), "")) {
+                    instance.setNumber(instance.getVolume());
+                }
+                instance.deleteVolume();
+            }
+        }
 
         instance.getFields().entrySet().forEach(entry -> {
             String value = entry.getValue();
@@ -146,7 +161,7 @@ public class VancouverBuilder {
         if (field != null) return builder
                 .substring(0, result.lastIndexOf(field) + field.length())
                 .replaceAll("\\.\\s*\\.", ".")
-                .replaceAll("\\.[a-zA-Zа-яА-Я]?\\.", ".")
+                //.replaceAll("\\.[a-zA-Zа-яА-Я]?\\.", ".")
                 .replaceAll(",\\s*[,.]", ".")
                 .replaceAll(":\\s*[,.]", ":");
         return result;

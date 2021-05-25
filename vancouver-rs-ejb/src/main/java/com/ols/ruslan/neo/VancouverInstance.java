@@ -256,12 +256,8 @@ public class VancouverInstance {
     }
 
     public void setPages(String pages) {
-        try {
-            if (fields.get("pages") == null) throw new NullPointerException();
+            if (fields.get("pages") == null) return;
             this.fields.put("pages", pages);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
     }
 
     public String getVolume() {
